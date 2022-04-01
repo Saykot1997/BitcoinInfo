@@ -1,4 +1,4 @@
-## FacebookClone
+# Bitcoin info
 
 This is a bitcoin information getting api.
 
