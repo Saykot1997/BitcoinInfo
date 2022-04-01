@@ -13,7 +13,7 @@ app.get("/", (req, res) => {
 
 app.get("/getBitcoinInfo", async (req, res) => {
 
-    const currencyCode = req.query.currency
+    const currencyCode = req.query.currency.toUpperCase()
 
     if (currencyCode === undefined) {
 
@@ -67,7 +67,11 @@ app.get("/getBitcoinInfo", async (req, res) => {
 
             const currencyLink = `https://api.coindesk.com/v1/bpi/historical/close.json?start=${oneMonthAgoYear}-${oneMonthAgoMonth}-${oneMonthAgoDate}&end=${todayYear}-${todayMonth}-${todayDate}&currency=${currencyCode.toLowerCase()}`;
 
-            if (currencyCode === "USD" || currencyCode === "EUR" || currencyCode === "GBP") {
+            const currencyName = Object.keys(response.data.bpi)
+
+            const haseName = currencyName.find((name) => name === currencyCode);
+
+            if (haseName) {
 
                 const currenciesPrices = await axios.get(currencyLink);
 
@@ -81,7 +85,7 @@ app.get("/getBitcoinInfo", async (req, res) => {
 
                 const data = {
                     currency: response.data.bpi[`${currencyCode}`].description,
-                    currencyPresentRate: response.data.bpi.USD.rate,
+                    currencyPresentRate: response.data.bpi[`${currencyCode}`].rate,
                     highestReateOfMonth: max,
                     lowestReatOfMonth: min,
                 }
